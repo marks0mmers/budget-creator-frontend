@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useContext } from "react";
+import { useCallback, useEffect, useContext } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 import { useLocalStorage } from "../util/use-local-storage";
 import { Toast } from "../util/toast";
@@ -6,7 +6,7 @@ import { http } from "../util/fetch-builder";
 import { User } from "../models/user";
 import { store, useStateValue } from "../state/store";
 import { SetCurrentUserCreator } from "../state/actions";
-import { Header } from "./components/shared/header";
+import { Header } from "./components/shared/header/header";
 import { HomePage } from "./pages/home-page";
 import { LoginPage } from "./pages/login-page";
 

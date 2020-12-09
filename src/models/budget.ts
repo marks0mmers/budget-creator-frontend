@@ -1,4 +1,4 @@
-import { Record, RecordOf } from "immutable";
+import { Record } from "immutable";
 
 interface IBudget {
     id?: string;
@@ -6,9 +6,8 @@ interface IBudget {
     primaryUserId?: string;
 }
 
-export type Budget = RecordOf<IBudget>;
-export const Budget = Record<IBudget>({
+export class Budget extends Record<IBudget>({
     id: "",
     title: "",
     primaryUserId: "",
-});
+}) {}

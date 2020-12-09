@@ -1,15 +1,14 @@
 import styled from "styled-components";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Map, List } from "immutable";
-import { useStateValue, store } from "../../../state/store";
-import { getFullNameWithUsername } from "../../../models/user";
-import { http } from "../../../util/fetch-builder";
-import { Budget } from "../../../models/budget";
-import { Toast } from "../../../util/toast";
-import { SetActiveBudgetCreator } from "../../../state/actions";
-import { Button } from "./button";
-import { Select } from "./input";
+import { useStateValue, store } from "../../../../state/store";
+import { http } from "../../../../util/fetch-builder";
+import { Budget } from "../../../../models/budget";
+import { Toast } from "../../../../util/toast";
+import { SetActiveBudgetCreator } from "../../../../state/actions";
+import { Button } from "../button";
+import { Select } from "../input";
 
 export const Header = () => {
 
@@ -22,7 +21,7 @@ export const Header = () => {
 
     const fetchBudgets = useCallback(async () => {
         try {
-            const data = await http<Budget[]>("/api/budget");
+            const data = await http<Budget[]>("/api/budgets");
             const budgets = List(data.parsedBody?.map(budget => new Budget(budget)) ?? [])
                 .toMap()
                 .mapKeys((_, budget) => budget.id ?? "")
@@ -59,9 +58,13 @@ export const Header = () => {
                 onChange={onBudgetSelectorChanged}
             >
                 <option value="" key="">Select a Budget</option>
-                {budgets.map(budget => (<option value={budget.id} key={budget.id}>{budget.title}</option>))}
+                {budgets
+                    .map(budget => (<option value={budget.id} key={budget.id}>{budget.title}</option>))
+                    .valueSeq()
+                    .toArray()}
             </Select>
-            <Username>{getFullNameWithUsername(currentUser)}</Username>
+            <div id="buttons-container" style={{display: "flex", flexDirection: "row-reverse"}}></div>
+            <Username>{currentUser?.fullName ?? "Guest"}</Username>
             <Button
                 id="loginLogoutButton"
                 text={currentUser ? "Log Out" : "Log In"}
@@ -77,7 +80,7 @@ export const Header = () => {
 const StyledHeader = styled.header`
     display: grid;
     grid-template-rows: 60px;
-    grid-template-columns: auto auto 1fr auto auto;
+    grid-template-columns: auto auto 1fr 150px auto;
     grid-column-gap: 20px;
     grid-template-areas: "title budget-selector . user button";
     align-items: center;
@@ -90,9 +93,14 @@ const Title = styled.h1`
     grid-area: title;
     color: white;
     font-weight: 1;
+    padding-right: 15px;
+    border-right: 1px solid white;
 `;
 
 const Username = styled.span`
     grid-area: user;
     color: white;
+    text-align: center;
+    border-right: 1px solid white;
+    border-left: 1px solid white;
 `;

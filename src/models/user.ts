@@ -1,4 +1,4 @@
-import { Record, RecordOf } from "immutable";
+import { Record } from "immutable";
 
 interface IUser {
     id?: string;
@@ -8,13 +8,14 @@ interface IUser {
     enabled: boolean;
 }
 
-export type User = RecordOf<IUser>;
-export const User = Record<IUser>({
+export class User extends Record<IUser>({
     id: undefined,
     username: "",
     firstName: "",
     lastName: "",
     enabled: false,
-});
-
-export const getFullNameWithUsername = (user?: User) => user ? `${user.firstName} ${user.lastName} (${user.username})` : "Guest";
+}) {
+    public get fullName() {
+        return `${this.firstName} ${this.lastName} (${this.username})`;
+    }
+}

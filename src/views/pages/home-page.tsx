@@ -1,6 +1,11 @@
-import React from "react";
 import styled from "styled-components";
 import { useStateValue } from "../../state/store";
+import { HeaderButtons } from "../components/shared/header/header-buttons";
+import { HeaderButton } from "../components/shared/header/header-button";
+import { useModalState } from "../../util/use-modal-state";
+import { Modal } from "../components/modals/shared/modal";
+import ModalHeader from "../components/modals/shared/modal-header";
+import { useCallback } from "react";
 
 const SelectBudgetLabel = styled.h2`
     font-weight: normal;
@@ -8,12 +13,35 @@ const SelectBudgetLabel = styled.h2`
 `;
 
 export const HomePage = () => {
+    const [isBudgetModalOpen, openBudgetModal, closeBudgetModal ] = useModalState();
     // const currentUser = useStateValue(state => state.currentUser);
     const activeBudget = useStateValue(state => state.activeBudget);
 
+    const onAddBudgetClick = useCallback(() => {
+        openBudgetModal();
+    }, [openBudgetModal]);
+
     if (!activeBudget) {
         return (
-            <SelectBudgetLabel>No Budget Selected</SelectBudgetLabel>
+            <>
+                <HeaderButtons id="buttons-container">
+                    <HeaderButton
+                        text="Add Budget"
+                        icon="add"
+                        onClick={onAddBudgetClick}
+                    />
+                </HeaderButtons>
+                <SelectBudgetLabel>No Budget Selected</SelectBudgetLabel>
+                <Modal
+                    isOpen={isBudgetModalOpen}
+                    onClose={closeBudgetModal}
+                >
+                    <ModalHeader 
+                        title="Budget Form"
+                        exitModal={closeBudgetModal}
+                    />
+                </Modal>
+            </>
         );
     }
 
