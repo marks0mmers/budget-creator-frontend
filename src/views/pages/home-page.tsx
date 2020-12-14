@@ -6,6 +6,7 @@ import { useModalState } from "../../util/use-modal-state";
 import { Modal } from "../components/modals/shared/modal";
 import ModalHeader from "../components/modals/shared/modal-header";
 import { useCallback } from "react";
+import { BudgetForm } from "../components/forms/budget-form";
 
 const SelectBudgetLabel = styled.h2`
     font-weight: normal;
@@ -14,7 +15,6 @@ const SelectBudgetLabel = styled.h2`
 
 export const HomePage = () => {
     const [isBudgetModalOpen, openBudgetModal, closeBudgetModal ] = useModalState();
-    // const currentUser = useStateValue(state => state.currentUser);
     const activeBudget = useStateValue(state => state.activeBudget);
 
     const onAddBudgetClick = useCallback(() => {
@@ -36,10 +36,11 @@ export const HomePage = () => {
                     isOpen={isBudgetModalOpen}
                     onClose={closeBudgetModal}
                 >
-                    <ModalHeader 
+                    <ModalHeader
                         title="Budget Form"
                         exitModal={closeBudgetModal}
                     />
+                    <BudgetForm />
                 </Modal>
             </>
         );

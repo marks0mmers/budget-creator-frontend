@@ -1,11 +1,11 @@
 import { useCallback, useContext } from "react";
 import styled from "styled-components";
-import { Formik, FormikHelpers, FormikProps } from "formik";
-import * as Yup from "yup";
+import { FormikHelpers, useFormik } from "formik";
+import { object, string } from "yup";
 import { useHistory } from "react-router-dom";
 import { store } from "../../../state/store";
 import { Required } from "../shared/required";
-import { Input } from "../shared/input";
+import { Input, LabelInput, Error } from "../shared/input";
 import { Button } from "../shared/button";
 import { User } from "../../../models/user";
 import { SetCurrentUserCreator } from "../../../state/actions";
@@ -37,58 +37,52 @@ export const LoginForm = () => {
         }
     }, [dispatch, history, setJwtToken]);
 
+    const formik = useFormik<LoginUserForm>({
+        initialValues: {
+            username: "",
+            password: "",
+        },
+        validateOnBlur: false,
+        validateOnChange: false,
+        onSubmit: handleSubmit,
+        validationSchema: object().shape({
+            username: string().required("Username is required"),
+            password: string().required("Password is required"),
+        }),
+    });
+
     return (
-        <Formik
-            initialValues={{
-                username: "",
-                password: "",
-            }}
-            validateOnBlur={false}
-            validateOnChange={false}
-            validationSchema={Yup.object().shape({
-                username: Yup
-                    .string()
-                    .required("Username is required"),
-                password: Yup
-                    .string()
-                    .required("Password is required"),
-            })}
-            onSubmit={handleSubmit}
-        >
-            {(formProps: FormikProps<LoginUserForm>) => (
-                <Form id="login-form" onSubmit={formProps.handleSubmit}>
-                    <LabelInput id="username-label">
-                        Username:
-                        <Required />
-                        <Input
-                            type="text"
-                            name="username"
-                            onChange={formProps.handleChange}
-                            onBlur={formProps.handleBlur}
-                            value={formProps.values.username}
-                        />
-                        {formProps.errors.username && <Error>{formProps.errors.username}</Error>}
-                    </LabelInput>
-                    <LabelInput id="password-label">
-                        Password:
-                        <Required />
-                        <Input
-                            type="password"
-                            name="password"
-                            onChange={formProps.handleChange}
-                            onBlur={formProps.handleBlur}
-                            value={formProps.values.password}
-                        />
-                        {formProps.errors.password && <Error>{formProps.errors.password}</Error>}
-                    </LabelInput>
-                    <Button
-                        type="submit"
-                        text="Submit"
-                        height={40}
-                    />
-                </Form>
-            )}
-        </Formik>
+        <Form id="login-form" onSubmit={formik.handleSubmit}>
+            <LabelInput id="username-label">
+                Username:
+                <Required />
+                <Input
+                    type="text"
+                    name="username"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.username}
+                />
+                {formik.errors.username && <Error>{formik.errors.username}</Error>}
+            </LabelInput>
+            <LabelInput id="password-label">
+                Password:
+                <Required />
+                <Input
+                    type="password"
+                    name="password"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.password}
+                />
+                {formik.errors.password && <Error>{formik.errors.password}</Error>}
+            </LabelInput>
+            <Button
+                type="submit"
+                text="Submit"
+                height={40}
+            />
+        </Form>
     );
 };
 
@@ -97,13 +91,4 @@ const Form = styled.form`
     margin: 10px 10px 10px 10px;
     background: white;
     padding: 20px;
-`;
-
-const LabelInput = styled.div`
-    margin-bottom: 10px;
-    font-weight: bold;
-`;
-
-const Error = styled.div`
-    color: red;
 `;

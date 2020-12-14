@@ -1,12 +1,12 @@
 import { Record } from "immutable";
 
-interface IBudget {
+export interface BudgetContract {
     id?: string;
     title: string;
     primaryUserId?: string;
 }
 
-export class Budget extends Record<IBudget>({
+export class Budget extends Record<BudgetContract>({
     id: "",
     title: "",
     primaryUserId: "",

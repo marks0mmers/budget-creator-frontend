@@ -1,5 +1,14 @@
 import styled from "styled-components";
 
+export const LabelInput = styled.div`
+    margin-bottom: 10px;
+    font-weight: bold;
+`;
+
+export const Error = styled.div`
+    color: red;
+`;
+
 interface Props {
     width?: number;
     height?: number;

@@ -1,6 +1,6 @@
 import { Record } from "immutable";
 
-interface IUser {
+interface UserContract {
     id?: string;
     username: string;
     firstName: string;
@@ -8,7 +8,7 @@ interface IUser {
     enabled: boolean;
 }
 
-export class User extends Record<IUser>({
+export class User extends Record<UserContract>({
     id: undefined,
     username: "",
     firstName: "",
