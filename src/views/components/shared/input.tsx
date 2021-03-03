@@ -1,9 +1,14 @@
 import styled from "styled-components";
 
-export const LabelInput = styled.div`
+export const LabelInput = styled.label`
+    display: block;
     margin-bottom: 10px;
     font-weight: bold;
 `;
+
+export const Required = () => (
+    <span id="required" style={{color: "red", marginLeft: 5}}>*</span>
+);
 
 export const Error = styled.div`
     color: red;

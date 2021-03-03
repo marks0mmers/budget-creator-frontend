@@ -1,33 +1,37 @@
 import { FormikHelpers, useFormik } from "formik";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { object, string } from "yup";
-import { Input, LabelInput, Error } from "../shared/input";
-import { BudgetContract } from "../../../models/budget";
-import { http } from "../../../util/fetch-builder";
+import { Input, LabelInput, Error, Required } from "../shared/input";
+import { Budget, BudgetContract } from "../../../models/budget";
+import { useHttp } from "../../../util/fetch-builder";
 import { Toast } from "../../../util/toast";
-import { Required } from "../shared/required";
 import { Button } from "../shared/button";
+import { ActivityLoading } from "../shared/activity-loading";
 
 interface BudgetFormType {
     title: string;
 }
 
-// interface Props {
-//     onSubmit: (budget: Budget) => void;
-// }
+interface Props {
+    onSubmit: (budget: Budget) => void;
+}
 
-export const BudgetForm = () => {
-    const handleSubmit = useCallback(async (values: BudgetFormType, formikHelpers: FormikHelpers<BudgetFormType>) => {
-        try {
-            await http<BudgetContract>("/api/budgets", "POST", values);
-            // onSubmit(new Budget(data.parsedBody));
-        } catch(error) {
-            Toast.error("Failed to Submit Budget");
-        } finally {
-            formikHelpers.setSubmitting(false);
+export const BudgetForm = ({onSubmit}: Props) => {
+    const [createBudgetRequest, isCreateBudgetLoading, createBudgetError] = useHttp<BudgetContract>("/api/budgets", "POST");
+
+    useEffect(() => {
+        if (createBudgetError) {
+            Toast.error(createBudgetError.message);
         }
-    }, []);
+    }, [createBudgetError]);
+
+    const handleSubmit = useCallback(async (values: BudgetFormType, formikHelpers: FormikHelpers<BudgetFormType>) => {
+        const data = await createBudgetRequest(values);
+        onSubmit(new Budget(data));
+
+        formikHelpers.setSubmitting(false);
+    }, [onSubmit, createBudgetRequest]);
 
     const formik = useFormik<BudgetFormType>({
         initialValues: {
@@ -42,29 +46,33 @@ export const BudgetForm = () => {
     });
 
     return (
-        <Form id="budget-form" onSubmit={formik.handleSubmit}>
-            <LabelInput id="title=label">
-                Title:
-                <Required />
-                <Input
-                    type="text"
-                    name="title"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.title}
+        <>
+            {isCreateBudgetLoading && <ActivityLoading />}
+            <Form id="budget-form" onSubmit={formik.handleSubmit}>
+                <LabelInput id="title=label">
+                    Title:
+                    <Required />
+                    <Input
+                        type="text"
+                        name="title"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.title}
+                    />
+                    {formik.errors.title && <Error>{formik.errors.title}</Error>}
+                </LabelInput>
+                <Button
+                    type="submit"
+                    text="Submit"
+                    height={40}
                 />
-                {formik.errors.title && <Error>{formik.errors.title}</Error>}
-            </LabelInput>
-            <Button
-                type="submit"
-                text="Submit"
-                height={40}
-            />
-        </Form>
+            </Form>
+        </>
     );
 };
 
 const Form = styled.form`
-    width: 360px;
-    padding: 20px;
+    label:last-of-type {
+        margin-bottom: 20px;
+    }
 `;

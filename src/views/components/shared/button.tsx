@@ -2,6 +2,28 @@ import { MouseEvent } from "react";
 import styled from "styled-components";
 import { Icon } from "./icon";
 
+export enum ColorType {
+    Primary = "primary",
+    Secondary = "secondary",
+}
+
+interface ColorTypeMetadata {
+    background: string;
+    fontColor: string;
+    borderColor?: string;
+}
+
+const ColorTypes: {[key: string]: ColorTypeMetadata} = {
+    [ColorType.Primary]: {
+        background: "#BE5342",
+        fontColor: "white",
+    },
+    [ColorType.Secondary]: {
+        background: "#42ABBE",
+        fontColor: "white",
+    },
+};
+
 interface Props {
     id?: string;
     text?: string;
@@ -13,6 +35,7 @@ interface Props {
     marginTopBottom?: number;
     marginLeftRight?: number;
     gridArea?: string;
+    colorType?: ColorType;
     onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -23,8 +46,12 @@ export const Button = (props: Props) => (
     </StyledButton>
 );
 
-const StyledButton = styled.button<Props>`
-    background: #bbbbbb;
+const StyledButton = styled.button.attrs((props: Props) => ({
+    ...props,
+    colorType: props.colorType ?? ColorType.Primary,
+}))`
+    background: ${props => ColorTypes[props.colorType].background};
+    color: ${props => ColorTypes[props.colorType].fontColor};
     height: ${props => props.height ?? 40}px;
     width: ${props => props.width ? `${props.width}px` : "100%"};
     margin: ${props => props.marginTopBottom ?? 0}px ${props => props.marginLeftRight ?? 0}px;
@@ -35,6 +62,6 @@ const StyledButton = styled.button<Props>`
     border-radius: 6px;
     grid-area: ${props => props.gridArea};
     :hover {
-        background: #eeeeee;
+        filter: brightness(115%);
     }
 `;

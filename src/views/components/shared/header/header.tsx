@@ -7,14 +7,15 @@ import { http } from "../../../../util/fetch-builder";
 import { Budget } from "../../../../models/budget";
 import { Toast } from "../../../../util/toast";
 import { SetActiveBudgetCreator } from "../../../../state/actions";
-import { Button } from "../button";
+import { Button, ColorType } from "../button";
 import { Select } from "../input";
+import { useLocalStorage } from "../../../../util/use-local-storage";
 
 export const Header = () => {
-
     const currentUser = useStateValue((state) => state.currentUser);
     const history = useHistory();
     const { dispatch } = useContext(store);
+    const [storedActiveBudgetId, setStoredActiveBudgetId] = useLocalStorage("activeBudgetId");
     const activeBudget = useStateValue(state => state.activeBudget);
 
     const [budgets, setBudgets] = useState<Map<string, Budget>>(Map());
@@ -33,8 +34,25 @@ export const Header = () => {
     }, []);
 
     useEffect(() => {
-        fetchBudgets();
-    }, [fetchBudgets]);
+        if (currentUser) {
+            fetchBudgets();
+        }
+    }, [fetchBudgets, currentUser]);
+
+    useEffect(() => {
+        if (activeBudget?.id && !budgets.keySeq().contains(activeBudget.id)) {
+            setBudgets(budgets.set(activeBudget.id, activeBudget));
+        }
+    }, [activeBudget, budgets]);
+
+    useEffect(() => {
+        if (!activeBudget && storedActiveBudgetId) {
+            dispatch(SetActiveBudgetCreator(budgets.get(storedActiveBudgetId)));
+        }
+        if (activeBudget && storedActiveBudgetId !== activeBudget.id) {
+            setStoredActiveBudgetId(activeBudget.id);
+        }
+    }, [activeBudget, storedActiveBudgetId, budgets, dispatch, setStoredActiveBudgetId]);
 
     const onLoginClick = useCallback(() => {
         history.push("/login");
@@ -64,13 +82,14 @@ export const Header = () => {
                     .toArray()}
             </Select>
             <div id="buttons-container" style={{display: "flex", flexDirection: "row-reverse"}}></div>
-            <Username>{currentUser?.fullName ?? "Guest"}</Username>
+            <Username>{currentUser?.fullName ?? "Please Log In"}</Username>
             <Button
                 id="loginLogoutButton"
                 text={currentUser ? "Log Out" : "Log In"}
                 height={40}
                 width={100}
                 gridArea="button"
+                colorType={ColorType.Secondary}
                 onClick={currentUser ? onLogoutClick : onLoginClick}
             />
         </StyledHeader>
@@ -86,7 +105,7 @@ const StyledHeader = styled.header`
     align-items: center;
     padding: 0 20px;
 
-    background: darkcyan;
+    background: #42ABBE;
 `;
 
 const Title = styled.h1`

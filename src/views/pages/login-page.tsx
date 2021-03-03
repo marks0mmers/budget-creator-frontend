@@ -28,7 +28,7 @@ const Container = styled.section`
     grid-area: container;
 
     width: 420px;
-    background: darkcyan;
+    background: #42ABBE;
     border-radius: 40px 40px 10px 10px;
 `;
 

@@ -6,25 +6,19 @@ export enum ActionTypes {
     SET_ACTIVE_BUDGET = "actions/SET_ACTIVE_BUDGET",
 }
 
-interface SetCurrentUser {
-    user: User
-    type: ActionTypes.SET_CURRENT_USER;
-}
-
-export const SetCurrentUserCreator = (user: User): SetCurrentUser => ({
+export const SetCurrentUserCreator = (user: User) => ({
     user,
-    type: ActionTypes.SET_CURRENT_USER,
+    type: ActionTypes.SET_CURRENT_USER as const,
 });
 
-interface SetActiveBudget {
-    budget?: Budget;
-    type: ActionTypes.SET_ACTIVE_BUDGET;
-}
+type SetCurrentUser = ReturnType<typeof SetCurrentUserCreator>;
 
-export const SetActiveBudgetCreator = (budget?: Budget): SetActiveBudget => ({
+export const SetActiveBudgetCreator = (budget?: Budget) => ({
     budget,
-    type: ActionTypes.SET_ACTIVE_BUDGET,
+    type: ActionTypes.SET_ACTIVE_BUDGET as const,
 });
+
+type SetActiveBudget = ReturnType<typeof SetActiveBudgetCreator>;
 
 export type Action =
     SetCurrentUser |

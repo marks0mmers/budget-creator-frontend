@@ -5,6 +5,7 @@ interface Props {
     isOpen: boolean;
     onClose: () => void;
     children?: ReactNode;
+    width?: number;
 }
 
 export const Modal: FC<Props> = (props: Props) => (
@@ -15,10 +16,11 @@ export const Modal: FC<Props> = (props: Props) => (
             },
             content: {
                 height: "fit-content",
-                width: "40%",
-                left: "30%",
+                width: `${props.width}px` ?? "40%",
+                margin: "100px auto auto auto",
             },
         }}
+        appElement={document.getElementById("root") ?? undefined}
         isOpen={props.isOpen}
         onRequestClose={props.onClose}
     >

@@ -1,6 +1,6 @@
 import { Record } from "immutable";
 
-interface UserContract {
+export interface UserContract {
     id?: string;
     username: string;
     firstName: string;
