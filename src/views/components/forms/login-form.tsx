@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import styled from "styled-components";
 import { useFormik } from "formik";
 import { object, string } from "yup";
@@ -15,10 +14,6 @@ interface LoginUserForm {
 export const LoginForm = () => {
     const dispatch = useMapDispatch({ login });
 
-    const handleSubmit = useCallback((values: LoginUserForm) => {
-        dispatch.login(values);
-    }, [dispatch]);
-
     const formik = useFormik<LoginUserForm>({
         initialValues: {
             username: "",
@@ -26,7 +21,9 @@ export const LoginForm = () => {
         },
         validateOnBlur: false,
         validateOnChange: false,
-        onSubmit: handleSubmit,
+        onSubmit: values => {
+            dispatch.login(values);
+        },
         validationSchema: object().shape({
             username: string().required("Username is required"),
             password: string().required("Password is required"),

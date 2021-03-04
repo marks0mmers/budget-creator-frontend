@@ -1,5 +1,4 @@
 import { useFormik } from "formik";
-import { useCallback } from "react";
 import styled from "styled-components";
 import { object, string } from "yup";
 import { Input, LabelInput, Error, Required } from "../shared/input";
@@ -22,14 +21,7 @@ export const BudgetForm = ({closeModal}: Props) => {
         isBudgetLoading: isBudgetLoading(state),
     }));
 
-    const dispatch = useMapDispatch({
-        createBudget,
-    });
-
-    const handleSubmit = useCallback((values: BudgetFormType) => {
-        dispatch.createBudget(values);
-        closeModal();
-    }, [closeModal, dispatch]);
+    const dispatch = useMapDispatch({ createBudget });
 
     const formik = useFormik<BudgetFormType>({
         initialValues: {
@@ -37,7 +29,10 @@ export const BudgetForm = ({closeModal}: Props) => {
         },
         validateOnBlur: false,
         validateOnChange: false,
-        onSubmit: handleSubmit,
+        onSubmit: values => {
+            dispatch.createBudget(values);
+            closeModal();
+        },
         validationSchema: object().shape({
             title: string().required(),
         }),
