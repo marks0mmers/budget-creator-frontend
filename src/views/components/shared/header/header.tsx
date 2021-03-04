@@ -82,7 +82,7 @@ const StyledHeader = styled.header`
     align-items: center;
     padding: 0 20px;
 
-    background: #42ABBE;
+    background: rgb(185, 23, 23);
 `;
 
 const Title = styled.h1`

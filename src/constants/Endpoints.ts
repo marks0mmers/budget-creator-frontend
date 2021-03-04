@@ -7,7 +7,7 @@ interface UrlWithBody<T> {
 }
 
 export class Endpoints {
-    public static readonly FetchCurrentUser = "/api/users/me";
+    public static readonly FetchCurrentUser = "/api/users/current";
     public static readonly Login = (contract: LoginContract): UrlWithBody<LoginContract> => ({
         url: "/api/users/login",
         body: contract,

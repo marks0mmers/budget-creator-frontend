@@ -17,10 +17,13 @@ export const FetchAllBudgetsEpic = (
     filter(fetchAllBudgets.match),
     mergeMap(action => ajax.getJSON<BudgetContract[]>(Endpoints.FetchAllBudgets, constructAjaxHeaders())
         .pipe(
-            mergeMap(contracts => [fetchAllBudgetsSuccess(List(contracts.map(c => new Budget(c)))
-                .toMap()
-                .mapKeys((_, b) => b.id)
-                .toMap())],
+            mergeMap(contracts => [
+                fetchAllBudgetsSuccess(List(contracts.map(c => new Budget(c)))
+                    .toMap()
+                    .mapKeys((_, b) => b.id)
+                    .toMap()),
+                setActiveBudget(window.localStorage.getItem("activeBudgetId") ?? ""),
+            ],
             ),
             catchError(err => [ajaxFailure({err, failedAction: action.type})]),
         ),

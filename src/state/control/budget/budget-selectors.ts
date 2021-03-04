@@ -6,5 +6,7 @@ export const getActiveBudgetId = (state: RootState) => state.control.budget.acti
 
 export const getActiveBudget = createSelector(
     [getBudgets, getActiveBudgetId],
-    (budgets, activeBudget) => activeBudget ? budgets.get(activeBudget) : undefined,
+    (budgets, activeBudget) => {
+        return activeBudget ? budgets.get(activeBudget) : undefined;
+    },
 );

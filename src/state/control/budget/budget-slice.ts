@@ -13,6 +13,7 @@ const budgetControlSlice = createSlice({
     initialState: initialState,
     reducers: {
         setActiveBudget: (state, action: PayloadAction<string | undefined>) => {
+            window.localStorage.setItem("activeBudgetId", action.payload ?? "");
             state.activeBudgetId = action.payload;
         },
     },

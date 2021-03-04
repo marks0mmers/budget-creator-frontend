@@ -1,14 +1,36 @@
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { isSessionLoading } from "../../state/control/loading/loading-selectors";
+import { useMapState } from "../../state/hooks";
+import { getCurrentUser } from "../../state/session/session-selectors";
 import { LoginForm } from "../components/forms/login-form";
+import { ActivityLoading } from "../components/shared/activity-loading";
 
 export const LoginPage = () => {
+    const history = useHistory();
+
+    const appState = useMapState(state => ({
+        currentUser: getCurrentUser(state),
+        isLoginLoading: isSessionLoading(state),
+    }));
+
+    useEffect(() => {
+        if (appState.currentUser) {
+            history.push("/");
+        }
+    }, [appState.currentUser, history]);
+
     return (
-        <RootElement id="login-page">
-            <Container id="login-container">
-                <Title id="title">Login to Budget Creator</Title>
-                <LoginForm />
-            </Container>
-        </RootElement>
+        <>
+            {appState.isLoginLoading && <ActivityLoading />}
+            <RootElement id="login-page">
+                <Container id="login-container">
+                    <Title id="title">Login to Budget Creator</Title>
+                    <LoginForm />
+                </Container>
+            </RootElement>
+        </>
     );
 };
 
@@ -28,7 +50,7 @@ const Container = styled.section`
     grid-area: container;
 
     width: 420px;
-    background: #42ABBE;
+    background: rgb(185, 23, 23);
     border-radius: 40px 40px 10px 10px;
 `;
 

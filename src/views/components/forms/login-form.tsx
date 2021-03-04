@@ -2,12 +2,9 @@ import { useCallback } from "react";
 import styled from "styled-components";
 import { useFormik } from "formik";
 import { object, string } from "yup";
-import { useHistory } from "react-router-dom";
 import { Input, LabelInput, Error, Required } from "../shared/input";
 import { Button } from "../shared/button";
-import { ActivityLoading } from "../shared/activity-loading";
-import { useMapDispatch, useMapState } from "../../../state/hooks";
-import { isSessionLoading } from "../../../state/control/loading/loading-selectors";
+import { useMapDispatch } from "../../../state/hooks";
 import { login } from "../../../state/session/session-slice";
 
 interface LoginUserForm {
@@ -16,20 +13,11 @@ interface LoginUserForm {
 }
 
 export const LoginForm = () => {
-    const history = useHistory();
-
-    const appState = useMapState(state => ({
-        isLoginLoading: isSessionLoading(state),
-    }));
-
-    const dispatch = useMapDispatch({
-        login,
-    });
+    const dispatch = useMapDispatch({ login });
 
     const handleSubmit = useCallback((values: LoginUserForm) => {
         dispatch.login(values);
-        history.push("/");
-    }, [dispatch, history]);
+    }, [dispatch]);
 
     const formik = useFormik<LoginUserForm>({
         initialValues: {
@@ -47,7 +35,6 @@ export const LoginForm = () => {
 
     return (
         <>
-            {appState.isLoginLoading && <ActivityLoading />}
             <Form id="login-form" onSubmit={formik.handleSubmit}>
                 <LabelInput id="username-label">
                     Username:

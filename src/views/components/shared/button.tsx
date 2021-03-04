@@ -19,7 +19,7 @@ const ColorTypes: {[key: string]: ColorTypeMetadata} = {
         fontColor: "white",
     },
     [ColorType.Secondary]: {
-        background: "#42ABBE",
+        background: "rgb(185, 23, 23)",
         fontColor: "white",
     },
 };
