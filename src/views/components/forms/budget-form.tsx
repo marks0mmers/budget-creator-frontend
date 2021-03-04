@@ -6,8 +6,8 @@ import { Input, LabelInput, Error, Required } from "../shared/input";
 import { Button } from "../shared/button";
 import { ActivityLoading } from "../shared/activity-loading";
 import { useMapDispatch, useMapState } from "../../../state/hooks";
-import { CreateBudgetCreator } from "../../../state/data/budget/budget-actions";
-import { isBudgetLoading } from "../../../state/control/loading/selectors";
+import { isBudgetLoading } from "../../../state/control/loading/loading-selectors";
+import { createBudget } from "../../../state/data/budget/budget-slice";
 
 interface BudgetFormType {
     title: string;
@@ -23,7 +23,7 @@ export const BudgetForm = ({closeModal}: Props) => {
     }));
 
     const dispatch = useMapDispatch({
-        createBudget: CreateBudgetCreator,
+        createBudget,
     });
 
     const handleSubmit = useCallback((values: BudgetFormType) => {

@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { getBudgets } from "../../data/budget/budget-selectors";
-import { RootState } from "../../root-reducer";
+import { RootState } from "../../store";
 
 export const getActiveBudgetId = (state: RootState) => state.control.budget.activeBudgetId;
 

@@ -9,8 +9,8 @@ import { BudgetForm } from "../components/forms/budget-form";
 import { ActivityLoading } from "../components/shared/activity-loading";
 import { useMapDispatch, useMapState } from "../../state/hooks";
 import { getActiveBudget } from "../../state/control/budget/budget-selectors";
-import { DeleteBudgetCreator } from "../../state/data/budget/budget-actions";
-import { isBudgetLoading } from "../../state/control/loading/selectors";
+import { isBudgetLoading } from "../../state/control/loading/loading-selectors";
+import { deleteBudget } from "../../state/data/budget/budget-slice";
 
 const SelectBudgetLabel = styled.h2`
     font-weight: normal;
@@ -26,7 +26,7 @@ export const HomePage = () => {
     }));
 
     const dispatch = useMapDispatch({
-        deleteBudget: DeleteBudgetCreator,
+        deleteBudget,
     });
 
     const onDeleteBudgetClick = useCallback(async () => {

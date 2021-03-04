@@ -4,11 +4,11 @@ import { useHistory } from "react-router-dom";
 import { Button, ColorType } from "../button";
 import { Select } from "../input";
 import { useMapDispatch, useMapState } from "../../../../state/hooks";
-import { FetchAllBudgetsCreator } from "../../../../state/data/budget/budget-actions";
 import { getCurrentUser } from "../../../../state/session/session-selectors";
 import { getBudgets } from "../../../../state/data/budget/budget-selectors";
 import { getActiveBudget } from "../../../../state/control/budget/budget-selectors";
-import { SetActiveBudgetCreator } from "../../../../state/control/budget/budget-actions";
+import { fetchAllBudgets } from "../../../../state/data/budget/budget-slice";
+import { setActiveBudget } from "../../../../state/control/budget/budget-slice";
 
 export const Header = () => {
     const history = useHistory();
@@ -20,13 +20,13 @@ export const Header = () => {
     }));
 
     const dispatch = useMapDispatch({
-        fetchBudgets: FetchAllBudgetsCreator,
-        setActiveBudget: SetActiveBudgetCreator,
+        fetchAllBudgets,
+        setActiveBudget,
     });
 
     useEffect(() => {
         if (appState.currentUser) {
-            dispatch.fetchBudgets();
+            dispatch.fetchAllBudgets();
         }
     }, [dispatch, appState.currentUser]);
 

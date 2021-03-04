@@ -6,9 +6,9 @@ import { HomePage } from "./pages/home-page";
 import { LoginPage } from "./pages/login-page";
 import { ActivityLoading } from "./components/shared/activity-loading";
 import { useMapDispatch, useMapState } from "../state/hooks";
-import { FetchCurrentUserCreator } from "../state/session/session-actions";
 import { getCurrentUser } from "../state/session/session-selectors";
-import { isSessionLoading } from "../state/control/loading/selectors";
+import { isSessionLoading } from "../state/control/loading/loading-selectors";
+import { fetchCurrentUser } from "../state/session/session-slice";
 
 const App = () => {
     const location = useLocation();
@@ -20,7 +20,7 @@ const App = () => {
     }));
 
     const dispatch = useMapDispatch({
-        fetchCurrentUser: FetchCurrentUserCreator,
+        fetchCurrentUser,
     });
 
     useEffect(() => {

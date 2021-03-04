@@ -7,8 +7,8 @@ import { Input, LabelInput, Error, Required } from "../shared/input";
 import { Button } from "../shared/button";
 import { ActivityLoading } from "../shared/activity-loading";
 import { useMapDispatch, useMapState } from "../../../state/hooks";
-import { LoginCreator } from "../../../state/session/session-actions";
-import { isSessionLoading } from "../../../state/control/loading/selectors";
+import { isSessionLoading } from "../../../state/control/loading/loading-selectors";
+import { login } from "../../../state/session/session-slice";
 
 interface LoginUserForm {
     username: string;
@@ -23,11 +23,11 @@ export const LoginForm = () => {
     }));
 
     const dispatch = useMapDispatch({
-        login: LoginCreator,
+        login,
     });
 
     const handleSubmit = useCallback((values: LoginUserForm) => {
-        dispatch.login(values.username, values.password);
+        dispatch.login(values);
         history.push("/");
     }, [dispatch, history]);
 
