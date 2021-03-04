@@ -1,17 +1,16 @@
 import styled from "styled-components";
-import { store, useStateValue } from "../../state/store";
 import { HeaderButtons } from "../components/shared/header/header-buttons";
 import { HeaderButton } from "../components/shared/header/header-button";
 import { useModalState } from "../../util/use-modal-state";
-import { Modal } from "../components/modals/shared/modal";
-import ModalHeader from "../components/modals/shared/modal-header";
-import { useCallback, useContext, useEffect } from "react";
+import { Modal } from "../components/modals/modal";
+import ModalHeader from "../components/modals/modal-header";
+import { useCallback } from "react";
 import { BudgetForm } from "../components/forms/budget-form";
-import { SetActiveBudgetCreator } from "../../state/actions";
-import { Budget } from "../../models/budget";
-import { useHttp } from "../../util/fetch-builder";
-import { Toast } from "../../util/toast";
 import { ActivityLoading } from "../components/shared/activity-loading";
+import { useMapDispatch, useMapState } from "../../state/hooks";
+import { getActiveBudget } from "../../state/control/budget/budget-selectors";
+import { DeleteBudgetCreator } from "../../state/data/budget/budget-actions";
+import { isBudgetLoading } from "../../state/control/loading/selectors";
 
 const SelectBudgetLabel = styled.h2`
     font-weight: normal;
@@ -20,36 +19,29 @@ const SelectBudgetLabel = styled.h2`
 
 export const HomePage = () => {
     const [isBudgetModalOpen, openBudgetModal, closeBudgetModal ] = useModalState();
-    const { dispatch } = useContext(store);
-    const activeBudget = useStateValue(state => state.activeBudget);
+    
+    const appState = useMapState(state => ({
+        activeBudget: getActiveBudget(state),
+        isBudgetLoading: isBudgetLoading(state),
+    }));
 
-    const [deleteBudgetRequest, isDeleteBudgetLoading, deleteBudgetError] = useHttp(`/api/budgets/${activeBudget?.id}`, "DELETE");
-
-    useEffect(() => {
-        if (deleteBudgetError) {
-            Toast.error(deleteBudgetError.message);
-        }
-    }, [deleteBudgetError]);
+    const dispatch = useMapDispatch({
+        deleteBudget: DeleteBudgetCreator,
+    });
 
     const onDeleteBudgetClick = useCallback(async () => {
-        if (window.confirm(`Are you sure you want to delete Budget: ${activeBudget?.title}`)) {
-            const deletedId = await deleteBudgetRequest();
-            dispatch(SetActiveBudgetCreator(undefined));
+        if (window.confirm(`Are you sure you want to delete Budget: ${appState.activeBudget?.title}`) && appState.activeBudget?.id) {
+            dispatch.deleteBudget(appState.activeBudget.id);
         }
-    }, [activeBudget, deleteBudgetRequest, dispatch]);
+    }, [appState.activeBudget, dispatch]);
 
     const onAddBudgetClick = useCallback(() => {
         openBudgetModal();
     }, [openBudgetModal]);
 
-    const handleBudgetFormSubmit = useCallback((budget: Budget) => {
-        closeBudgetModal();
-        dispatch(SetActiveBudgetCreator(budget));
-    }, [dispatch, closeBudgetModal]);
-
     return (
         <>
-            {isDeleteBudgetLoading && <ActivityLoading />}
+            {appState.isBudgetLoading && <ActivityLoading />}
             <HeaderButtons id="buttons-container">
                 <HeaderButton
                     text="Add Budget"
@@ -63,7 +55,7 @@ export const HomePage = () => {
                 />
             </HeaderButtons>
 
-            <SelectBudgetLabel>{activeBudget?.title ?? "No Budget Selected"}</SelectBudgetLabel>
+            <SelectBudgetLabel>{appState.activeBudget?.title ?? "No Budget Selected"}</SelectBudgetLabel>
 
             <Modal
                 width={400}
@@ -74,7 +66,7 @@ export const HomePage = () => {
                     title="Budget Form"
                     exitModal={closeBudgetModal}
                 />
-                <BudgetForm onSubmit={handleBudgetFormSubmit}/>
+                <BudgetForm closeModal={closeBudgetModal}/>
             </Modal>
         </>
     );

@@ -1,44 +1,37 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 import { useLocalStorage } from "../util/use-local-storage";
-import { Toast } from "../util/toast";
-import { useFetch } from "../util/fetch-builder";
-import { User, UserContract } from "../models/user";
-import { store, useStateValue } from "../state/store";
-import { SetCurrentUserCreator } from "../state/actions";
 import { Header } from "./components/shared/header/header";
 import { HomePage } from "./pages/home-page";
 import { LoginPage } from "./pages/login-page";
 import { ActivityLoading } from "./components/shared/activity-loading";
+import { useMapDispatch, useMapState } from "../state/hooks";
+import { FetchCurrentUserCreator } from "../state/session/session-actions";
+import { getCurrentUser } from "../state/session/session-selectors";
+import { isSessionLoading } from "../state/control/loading/selectors";
 
 const App = () => {
     const location = useLocation();
-    const [jwtToken, setJwtToken] = useLocalStorage("jwtToken");
-    const { dispatch } = useContext(store);
-    const currentUser = useStateValue(state => state.currentUser);
+    const [jwtToken] = useLocalStorage("jwtToken");
 
-    const [userContract, isCurrentUserLoading, currentUserError] = useFetch<UserContract>(
-        "/api/users/me",
-        [jwtToken, currentUser],
-        () => !!jwtToken && !currentUser,
-    );
-    useEffect(() => {
-        if (userContract) {
-            const user = new User(userContract);
-            dispatch(SetCurrentUserCreator(user));
-        }
-    }, [userContract, dispatch]);
+    const appState = useMapState(state => ({
+        currentUser: getCurrentUser(state),
+        isCurrentUserLoading: isSessionLoading(state),
+    }));
+
+    const dispatch = useMapDispatch({
+        fetchCurrentUser: FetchCurrentUserCreator,
+    });
 
     useEffect(() => {
-        if (currentUserError) {
-            setJwtToken("");
-            Toast.error("Failed to get current user");
+        if (jwtToken && !appState.currentUser) {
+            dispatch.fetchCurrentUser();
         }
-    }, [currentUserError, setJwtToken]);
+    }, [appState.currentUser, jwtToken, dispatch]);
 
     return (
         <>
-            {isCurrentUserLoading && <ActivityLoading />}
+            {appState.isCurrentUserLoading && <ActivityLoading />}
             {location.pathname !== "/login" && <Header />}
             <Switch>
                 <Route path="/login">

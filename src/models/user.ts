@@ -1,5 +1,10 @@
 import { Record } from "immutable";
 
+export interface LoginContract {
+    username: string;
+    password: string;
+}
+
 export interface UserContract {
     id?: string;
     username: string;

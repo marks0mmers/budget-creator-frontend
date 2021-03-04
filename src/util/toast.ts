@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+import { AjaxError } from "rxjs/internal-compatibility";
 
 class ToastInstance {
     public success(message: string) {
@@ -18,6 +19,11 @@ class ToastInstance {
             position: toast.POSITION.BOTTOM_LEFT,
         });
         return true;
+    }
+
+    public ajaxError(ajaxError: AjaxError, message?: string) {
+        const text = message || (ajaxError.response && ajaxError.response.message) || ajaxError.message || "Error";
+        this.error(text);
     }
 }
 

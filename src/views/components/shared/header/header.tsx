@@ -1,58 +1,35 @@
 import styled from "styled-components";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Map, List } from "immutable";
-import { useStateValue, store } from "../../../../state/store";
-import { http } from "../../../../util/fetch-builder";
-import { Budget } from "../../../../models/budget";
-import { Toast } from "../../../../util/toast";
-import { SetActiveBudgetCreator } from "../../../../state/actions";
 import { Button, ColorType } from "../button";
 import { Select } from "../input";
-import { useLocalStorage } from "../../../../util/use-local-storage";
+import { useMapDispatch, useMapState } from "../../../../state/hooks";
+import { FetchAllBudgetsCreator } from "../../../../state/data/budget/budget-actions";
+import { getCurrentUser } from "../../../../state/session/session-selectors";
+import { getBudgets } from "../../../../state/data/budget/budget-selectors";
+import { getActiveBudget } from "../../../../state/control/budget/budget-selectors";
+import { SetActiveBudgetCreator } from "../../../../state/control/budget/budget-actions";
 
 export const Header = () => {
-    const currentUser = useStateValue((state) => state.currentUser);
     const history = useHistory();
-    const { dispatch } = useContext(store);
-    const [storedActiveBudgetId, setStoredActiveBudgetId] = useLocalStorage("activeBudgetId");
-    const activeBudget = useStateValue(state => state.activeBudget);
 
-    const [budgets, setBudgets] = useState<Map<string, Budget>>(Map());
+    const appState = useMapState(state => ({
+        activeBudget: getActiveBudget(state),
+        currentUser: getCurrentUser(state),
+        budgets: getBudgets(state),
+    }));
 
-    const fetchBudgets = useCallback(async () => {
-        try {
-            const data = await http<Budget[]>("/api/budgets");
-            const budgets = List(data.parsedBody?.map(budget => new Budget(budget)) ?? [])
-                .toMap()
-                .mapKeys((_, budget) => budget.id ?? "")
-                .toMap();
-            setBudgets(budgets);
-        } catch (ex) {
-            Toast.error("Failed to fetch budgets");
-        }
-    }, []);
+    const dispatch = useMapDispatch({
+        fetchBudgets: FetchAllBudgetsCreator,
+        setActiveBudget: SetActiveBudgetCreator,
+    });
 
     useEffect(() => {
-        if (currentUser) {
-            fetchBudgets();
+        if (appState.currentUser) {
+            dispatch.fetchBudgets();
         }
-    }, [fetchBudgets, currentUser]);
+    }, [dispatch, appState.currentUser]);
 
-    useEffect(() => {
-        if (activeBudget?.id && !budgets.keySeq().contains(activeBudget.id)) {
-            setBudgets(budgets.set(activeBudget.id, activeBudget));
-        }
-    }, [activeBudget, budgets]);
-
-    useEffect(() => {
-        if (!activeBudget && storedActiveBudgetId) {
-            dispatch(SetActiveBudgetCreator(budgets.get(storedActiveBudgetId)));
-        }
-        if (activeBudget && storedActiveBudgetId !== activeBudget.id) {
-            setStoredActiveBudgetId(activeBudget.id);
-        }
-    }, [activeBudget, storedActiveBudgetId, budgets, dispatch, setStoredActiveBudgetId]);
 
     const onLoginClick = useCallback(() => {
         history.push("/login");
@@ -63,34 +40,34 @@ export const Header = () => {
     }, []);
 
     const onBudgetSelectorChanged = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedBudget = budgets.get(e.target.value);
-        dispatch(SetActiveBudgetCreator(selectedBudget));
-    }, [budgets, dispatch]);
+        const selectedBudget = appState.budgets.get(e.target.value);
+        dispatch.setActiveBudget(selectedBudget?.id);
+    }, [appState.budgets, dispatch]);
 
     return (
         <StyledHeader>
             <Title>Budget Creator</Title>
             <Select
                 width={200}
-                value={activeBudget?.id ?? ""}
+                value={appState.activeBudget?.id ?? ""}
                 onChange={onBudgetSelectorChanged}
             >
                 <option value="" key="">Select a Budget</option>
-                {budgets
+                {appState.budgets
                     .map(budget => (<option value={budget.id} key={budget.id}>{budget.title}</option>))
                     .valueSeq()
                     .toArray()}
             </Select>
             <div id="buttons-container" style={{display: "flex", flexDirection: "row-reverse"}}></div>
-            <Username>{currentUser?.fullName ?? "Please Log In"}</Username>
+            <Username>{appState.currentUser?.fullName ?? "Please Log In"}</Username>
             <Button
                 id="loginLogoutButton"
-                text={currentUser ? "Log Out" : "Log In"}
+                text={appState.currentUser ? "Log Out" : "Log In"}
                 height={40}
                 width={100}
                 gridArea="button"
                 colorType={ColorType.Secondary}
-                onClick={currentUser ? onLogoutClick : onLoginClick}
+                onClick={appState.currentUser ? onLogoutClick : onLoginClick}
             />
         </StyledHeader>
     );
