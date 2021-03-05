@@ -1,4 +1,4 @@
-import { CreateBudgetContract } from "../models/budget";
+import { CreateBudgetContract, UpdateBudgetContract } from "../models/budget";
 import { LoginContract } from "../models/user";
 
 interface UrlWithBody<T> {
@@ -17,6 +17,12 @@ export class Endpoints {
     public static readonly CreateBudget = (contract: CreateBudgetContract): UrlWithBody<CreateBudgetContract> => ({
         url: "/api/budgets",
         body: contract,
+    })
+    public static readonly UpdateBudget = (contract: UpdateBudgetContract): UrlWithBody<CreateBudgetContract> => ({
+        url: `/api/budgets/${contract.id}`,
+        body: {
+            title: contract.title,
+        },
     })
     public static readonly DeleteBudget = (budgetId: string) => `/api/budgets/${budgetId}`
 }

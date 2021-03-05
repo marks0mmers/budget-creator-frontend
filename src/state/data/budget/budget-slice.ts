@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Collection, Map } from "immutable";
-import { Budget, CreateBudgetContract } from "../../../models/budget";
+import { Budget, CreateBudgetContract, UpdateBudgetContract } from "../../../models/budget";
 
 interface BudgetDataState {
     budgets: Collection<string, Budget>;
@@ -28,6 +28,11 @@ const budgetDataSlice = createSlice({
         deleteBudgetSuccess: (state, action: PayloadAction<string>) => {
             state.budgets = state.budgets.toMap().remove(action.payload);
         },
+
+        updateBudget: (state, _: PayloadAction<UpdateBudgetContract>) => state,
+        updateBudgetSuccess: (state, action: PayloadAction<Budget>) => {
+            state.budgets = state.budgets.toMap().set(action.payload.id, action.payload);
+        },
     },
 });
 
@@ -38,6 +43,8 @@ export const {
     createBudgetSuccess,
     deleteBudget,
     deleteBudgetSuccess,
+    updateBudget,
+    updateBudgetSuccess,
 } = budgetDataSlice.actions;
 
 export default budgetDataSlice.reducer;
