@@ -8,10 +8,11 @@ interface Props {
 
 export const IncomeSources = (props: Props) => {
     return (
-        <div id="income-sources">
+        <section id="income-sources">
+            Income Sources:
             {props.incomeSources.map((incomeSource, id) => (
                 <IncomeSourceView incomeSource={incomeSource} key={id}/>
             ))}
-        </div>
+        </section>
     );
 };

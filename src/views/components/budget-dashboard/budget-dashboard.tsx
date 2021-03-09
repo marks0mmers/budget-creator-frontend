@@ -9,14 +9,18 @@ export const BudgetDashboard = () => {
     }));
 
     return (
-        <section id="budget-dashboard">
+        <Container id="budget-dashboard">
             <SelectBudgetLabel id="active-budget-label">{appState.activeBudget?.title ?? "No Budget Selected"}</SelectBudgetLabel>
             {appState.activeBudget?.incomeSources && <IncomeSources incomeSources={appState.activeBudget.incomeSources} />}
-        </section>
+        </Container>
     );
 };
 
+const Container = styled.main`
+    padding: 20px;
+`;
+
 const SelectBudgetLabel = styled.h2`
     font-weight: normal;
-    margin: 20px 20px;
+    margin-bottom: 20px;
 `;
