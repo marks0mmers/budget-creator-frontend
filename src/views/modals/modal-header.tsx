@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Button } from "../shared/button";
-import { Divider } from "../shared/divider";
+import { Button } from "../components/shared/button";
+import { Divider } from "../components/shared/divider";
 
 interface Props {
     title: string;

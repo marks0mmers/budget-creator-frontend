@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { isSessionLoading } from "../../state/control/loading/loading-selectors";
 import { useMapState } from "../../state/hooks";
 import { getCurrentUser } from "../../state/session/session-selectors";
-import { LoginForm } from "../components/forms/login-form";
+import { LoginForm } from "../forms/login-form";
 import { ActivityLoading } from "../components/shared/activity-loading";
 
 export const LoginPage = () => {

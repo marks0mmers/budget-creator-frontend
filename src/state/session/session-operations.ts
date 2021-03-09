@@ -12,7 +12,7 @@ const FetchCurrentUserEpic = (
     action$: Observable<Action>,
 ) => action$.pipe(
     filter(fetchCurrentUser.match),
-    mergeMap(action => ajax.getJSON<UserContract>(Endpoints.FetchCurrentUser, constructAjaxHeaders())
+    mergeMap(action => ajax.getJSON<UserContract>(Endpoints.Users.FetchCurrentUser, constructAjaxHeaders())
         .pipe(
             mergeMap(contract => [fetchCurrentUserSuccess(new User(contract))]),
             catchError(err => [ajaxFailure({err, failedAction: action.type})]),
@@ -20,12 +20,12 @@ const FetchCurrentUserEpic = (
     ),
 );
 
-export const LoginEpic = (
+const LoginEpic = (
     action$: Observable<Action>,
 ) => action$.pipe(
     filter(login.match),
     mergeMap(action => {
-        const { url, body } = Endpoints.Login(action.payload);
+        const { url, body } = Endpoints.Users.Login(action.payload);
         return ajax.post(url, body, constructAjaxHeaders()).pipe(
             map(res => res.response as UserContract & { token?: string }),
             mergeMap(contract => {

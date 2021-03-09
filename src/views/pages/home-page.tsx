@@ -1,21 +1,16 @@
-import styled from "styled-components";
 import { HeaderButtons } from "../components/shared/header/header-buttons";
 import { HeaderButton } from "../components/shared/header/header-button";
 import { useModalState } from "../../util/use-modal-state";
-import { Modal } from "../components/modals/modal";
-import ModalHeader from "../components/modals/modal-header";
+import { Modal } from "../modals/modal";
+import ModalHeader from "../modals/modal-header";
 import { useCallback } from "react";
-import { BudgetForm } from "../components/forms/budget-form";
+import { BudgetForm } from "../forms/budget-form";
 import { ActivityLoading } from "../components/shared/activity-loading";
 import { useMapDispatch, useMapState } from "../../state/hooks";
 import { getActiveBudget } from "../../state/control/budget/budget-selectors";
 import { isBudgetLoading } from "../../state/control/loading/loading-selectors";
 import { deleteBudget } from "../../state/data/budget/budget-slice";
-
-const SelectBudgetLabel = styled.h2`
-    font-weight: normal;
-    margin: 20px 20px;
-`;
+import { BudgetDashboard } from "../components/budget-dashboard/budget-dashboard";
 
 export const HomePage = () => {
     const [isBudgetModalOpen, openBudgetModal, closeBudgetModal ] = useModalState();
@@ -55,7 +50,7 @@ export const HomePage = () => {
                 />
             </HeaderButtons>
 
-            <SelectBudgetLabel>{appState.activeBudget?.title ?? "No Budget Selected"}</SelectBudgetLabel>
+            <BudgetDashboard />
 
             <Modal
                 width={400}

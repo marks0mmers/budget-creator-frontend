@@ -20,11 +20,11 @@ import {
 import { ajaxFailure } from "../../session/session-slice";
 import { setActiveBudget } from "../../control/budget/budget-slice";
 
-export const FetchAllBudgetsEpic = (
+const FetchAllBudgetsEpic = (
     action$: Observable<Action>,
 ) => action$.pipe(
     filter(fetchAllBudgets.match),
-    mergeMap(action => ajax.getJSON<BudgetContract[]>(Endpoints.FetchAllBudgets, constructAjaxHeaders())
+    mergeMap(action => ajax.getJSON<BudgetContract[]>(Endpoints.Budgets.FetchAllBudgets, constructAjaxHeaders())
         .pipe(
             mergeMap(contracts => [
                 fetchAllBudgetsSuccess(List(contracts.map(Budget.fromContract))
@@ -39,12 +39,12 @@ export const FetchAllBudgetsEpic = (
     ),
 );
 
-export const CreateBudgetEpic = (
+const CreateBudgetEpic = (
     action$: Observable<Action>,
 ) => action$.pipe(
     filter(createBudget.match),
     mergeMap(action => {
-        const { url, body } = Endpoints.CreateBudget(action.payload);
+        const { url, body } = Endpoints.Budgets.CreateBudget(action.payload);
         return ajax.post(url, body, constructAjaxHeaders())
             .pipe(
                 map(res => res.response as BudgetContract),
@@ -54,11 +54,11 @@ export const CreateBudgetEpic = (
     }),
 );
 
-export const DeleteBudgetEpic = (
+const DeleteBudgetEpic = (
     action$: Observable<Action>,
 ) => action$.pipe(
     filter(deleteBudget.match),
-    mergeMap(action => ajax.delete(Endpoints.DeleteBudget(action.payload), constructAjaxHeaders())
+    mergeMap(action => ajax.delete(Endpoints.Budgets.DeleteBudget(action.payload), constructAjaxHeaders())
         .pipe(
             mergeMap(() => [deleteBudgetSuccess(action.payload), setActiveBudget(undefined)]),
             catchError(err => [ajaxFailure({err, failedAction: action.type})]),
@@ -66,12 +66,12 @@ export const DeleteBudgetEpic = (
     ),
 );
 
-export const UpdateBudgetEpic = (
+const UpdateBudgetEpic = (
     action$: Observable<Action>,
 ) => action$.pipe(
     filter(updateBudget.match),
     mergeMap(action => {
-        const { url, body } = Endpoints.UpdateBudget(action.payload);
+        const { url, body } = Endpoints.Budgets.UpdateBudget(action.payload);
         return ajax.put(url, body, constructAjaxHeaders())
             .pipe(
                 map(res => res.response as BudgetContract),
@@ -85,4 +85,5 @@ export const BudgetDataEpics = combineEpics(
     FetchAllBudgetsEpic,
     CreateBudgetEpic,
     DeleteBudgetEpic,
+    UpdateBudgetEpic,
 );

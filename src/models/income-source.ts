@@ -6,7 +6,7 @@ export interface IncomeSourceContract {
     amount: number;
 }
 
-export type CreateIncomeSourceContract = Omit<IncomeSourceContract, "id">;
+export type UpsertIncomeSourceContract = Omit<IncomeSourceContract, "id">;
 
 export class IncomeSource extends Record<IncomeSourceContract>({
     id: "",

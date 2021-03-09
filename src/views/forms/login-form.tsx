@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { useFormik } from "formik";
 import { object, string } from "yup";
-import { Input, LabelInput, Error, Required } from "../shared/input";
-import { Button } from "../shared/button";
-import { useMapDispatch } from "../../../state/hooks";
-import { login } from "../../../state/session/session-slice";
+import { Input, LabelInput, Error, Required } from "../components/shared/input";
+import { Button } from "../components/shared/button";
+import { useMapDispatch } from "../../state/hooks";
+import { login } from "../../state/session/session-slice";
 
 interface LoginUserForm {
     username: string;

@@ -1,12 +1,12 @@
 import { useFormik } from "formik";
 import styled from "styled-components";
 import { object, string } from "yup";
-import { Input, LabelInput, Error, Required } from "../shared/input";
-import { Button } from "../shared/button";
-import { ActivityLoading } from "../shared/activity-loading";
-import { useMapDispatch, useMapState } from "../../../state/hooks";
-import { isBudgetLoading } from "../../../state/control/loading/loading-selectors";
-import { createBudget } from "../../../state/data/budget/budget-slice";
+import { Input, LabelInput, Error, Required } from "../components/shared/input";
+import { Button } from "../components/shared/button";
+import { ActivityLoading } from "../components/shared/activity-loading";
+import { useMapDispatch, useMapState } from "../../state/hooks";
+import { isBudgetLoading } from "../../state/control/loading/loading-selectors";
+import { createBudget } from "../../state/data/budget/budget-slice";
 
 interface BudgetFormType {
     title: string;
