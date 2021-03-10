@@ -31,39 +31,37 @@ export const LoginForm = () => {
     });
 
     return (
-        <>
-            <Form id="login-form" onSubmit={formik.handleSubmit}>
-                <LabelInput id="username-label">
-                    Username:
-                    <Required />
-                    <Input
-                        type="text"
-                        name="username"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.username}
-                    />
-                    {formik.errors.username && <Error>{formik.errors.username}</Error>}
-                </LabelInput>
-                <LabelInput id="password-label">
-                    Password:
-                    <Required />
-                    <Input
-                        type="password"
-                        name="password"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.password}
-                    />
-                    {formik.errors.password && <Error>{formik.errors.password}</Error>}
-                </LabelInput>
-                <Button
-                    type="submit"
-                    text="Submit"
-                    height={40}
+        <Form id="login-form" onSubmit={formik.handleSubmit}>
+            <LabelInput id="username-label">
+                Username
+                <Required />
+                <Input
+                    type="text"
+                    name="username"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.username}
                 />
-            </Form>
-        </>
+                {formik.errors.username && <Error>{formik.errors.username}</Error>}
+            </LabelInput>
+            <LabelInput id="password-label">
+                Password
+                <Required />
+                <Input
+                    type="password"
+                    name="password"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.password}
+                />
+                {formik.errors.password && <Error>{formik.errors.password}</Error>}
+            </LabelInput>
+            <Button
+                type="submit"
+                text="Submit"
+                height={40}
+            />
+        </Form>
     );
 };
 

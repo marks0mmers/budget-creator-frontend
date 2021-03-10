@@ -75,7 +75,6 @@ export const Header = () => {
 
 const StyledHeader = styled.header`
     display: grid;
-    grid-template-rows: 60px;
     grid-template-columns: auto auto 1fr 150px auto;
     grid-column-gap: 20px;
     grid-template-areas: "title budget-selector . user button";

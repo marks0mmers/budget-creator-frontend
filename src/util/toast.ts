@@ -14,6 +14,12 @@ class ToastInstance {
         });
     }
 
+    public warn(message: string) {
+        toast.warn(message, {
+            position: toast.POSITION.BOTTOM_LEFT,
+        });
+    }
+
     public error(message: string): true {
         toast.error(message, {
             position: toast.POSITION.BOTTOM_LEFT,

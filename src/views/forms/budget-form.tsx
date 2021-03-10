@@ -43,7 +43,7 @@ export const BudgetForm = ({closeModal}: Props) => {
             {appState.isBudgetLoading && <ActivityLoading />}
             <Form id="budget-form" onSubmit={formik.handleSubmit}>
                 <LabelInput id="title=label">
-                    Title:
+                    Title
                     <Required />
                     <Input
                         type="text"

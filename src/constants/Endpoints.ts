@@ -36,7 +36,7 @@ export class Endpoints {
             budgetId: string,
             body: UpsertIncomeSourceContract,
         ): UrlWithBody<UpsertIncomeSourceContract> => ({
-            url: `/api/budgets/${budgetId}/incomeSources`,
+            url: `/api/budgets/${budgetId}/incomeSource`,
             body,
         }),
         UpdateIncomeSource: (
@@ -44,13 +44,13 @@ export class Endpoints {
             incomeSourceId: string,
             body: UpsertIncomeSourceContract,
         ): UrlWithBody<UpsertIncomeSourceContract> => ({
-            url: `/api/budgets/${budgetId}/incomeSources/${incomeSourceId}`,
+            url: `/api/budgets/${budgetId}/incomeSource/${incomeSourceId}`,
             body,
         }),
         DeleteIncomeSource: (
             budgetId: string,
             incomeSourceId: string,
-        ) =>`/api/budgets/${budgetId}/incomeSources/${incomeSourceId}`,
+        ) =>`/api/budgets/${budgetId}/incomeSource/${incomeSourceId}`,
     }
 }
 

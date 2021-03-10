@@ -10,17 +10,21 @@ export const BudgetDashboard = () => {
 
     return (
         <Container id="budget-dashboard">
-            <SelectBudgetLabel id="active-budget-label">{appState.activeBudget?.title ?? "No Budget Selected"}</SelectBudgetLabel>
-            {appState.activeBudget?.incomeSources && <IncomeSources incomeSources={appState.activeBudget.incomeSources} />}
+            {appState.activeBudget?.incomeSources &&
+                <IncomeSources
+                    budgetId={appState.activeBudget.id}
+                    incomeSources={appState.activeBudget.incomeSources}
+                />
+            }
         </Container>
     );
 };
 
 const Container = styled.main`
+    background: rgb(250 250 250);
     padding: 20px;
-`;
-
-const SelectBudgetLabel = styled.h2`
-    font-weight: normal;
-    margin-bottom: 20px;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas: "income-sources .           ";
 `;

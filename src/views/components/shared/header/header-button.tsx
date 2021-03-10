@@ -11,7 +11,7 @@ interface Props {
 
 export const HeaderButton = (props: Props) => (
     <StyledButton {...props}>
-        <Icon iconName={props.icon} margin={5} />
+        <Icon iconName={props.icon} margin={5} color="white" />
         {props.text}
     </StyledButton>
 );
