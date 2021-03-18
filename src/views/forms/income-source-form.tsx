@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { number, object, string } from "yup";
-import { createIncomeSource } from "../../state/data/income-source/income-source-slice";
+import { createIncomeSource, updateIncomeSource } from "../../state/data/income-source/income-source-slice";
 import { useMapDispatch } from "../../state/hooks";
 import { Toast } from "../../util/toast";
 import { Button } from "../components/shared/button";
@@ -17,20 +17,33 @@ interface IncomeSourceFormShape {
 interface Props {
     budgetId: string;
     hideForm: () => void;
+    incomeSourceId?: string;
+    initialValues?: IncomeSourceFormShape;
 }
 
 export const IncomeSourceForm = (props: Props) => {
-    const dispatch = useMapDispatch({ createIncomeSource });
+    const dispatch = useMapDispatch({ createIncomeSource, updateIncomeSource });
 
     const formik = useFormik<IncomeSourceFormShape>({
-        initialValues: {
+        initialValues: props.initialValues ?? {
             name: "",
             amount: 0,
         },
         validateOnBlur: false,
         validateOnChange: false,
         onSubmit: values => {
-            dispatch.createIncomeSource({budgetId: props.budgetId, contract: values});
+            if (props.incomeSourceId) {
+                dispatch.updateIncomeSource({
+                    budgetId: props.budgetId,
+                    incomeSourceId: props.incomeSourceId,
+                    contract: values,
+                });
+            } else {
+                dispatch.createIncomeSource({
+                    budgetId: props.budgetId,
+                    contract: values,
+                });
+            }
             props.hideForm();
         },
         validationSchema: object().shape({
