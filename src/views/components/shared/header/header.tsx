@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useCallback, useEffect } from "react";
+import { ChangeEvent, useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, ColorType } from "../button";
 import { Select } from "../input";
@@ -39,7 +39,7 @@ export const Header = () => {
         //
     }, []);
 
-    const onBudgetSelectorChanged = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    const onBudgetSelectorChanged = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
         const selectedBudget = appState.budgets.get(e.target.value);
         dispatch.setActiveBudget(selectedBudget?.id);
     }, [appState.budgets, dispatch]);
@@ -58,7 +58,7 @@ export const Header = () => {
                     .valueSeq()
                     .toArray()}
             </Select>
-            <div id="buttons-container" style={{display: "flex", flexDirection: "row-reverse"}}></div>
+            <div id="buttons-container" style={{display: "flex", flexDirection: "row-reverse"}}/>
             <Username>{appState.currentUser?.fullName ?? "Please Log In"}</Username>
             <Button
                 id="loginLogoutButton"

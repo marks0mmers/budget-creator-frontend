@@ -1,7 +1,7 @@
 import { Map } from "immutable";
 import styled from "styled-components";
 import { IncomeSource } from "../../../models/income-source";
-import { useTogglableState } from "../../../util/use-togglable-state";
+import { useToggleableState } from "../../../util/use-toggleable-state";
 import { IncomeSourceForm } from "../../forms/income-source-form";
 import { CircleButton } from "../shared/circle-button";
 import { IncomeSourceView } from "./income-source-view";
@@ -16,12 +16,12 @@ export const IncomeSources = (props: Props) => {
         isCreating,
         handleCreateClick,
         handleIncomeSourceSubmit,
-    ] = useTogglableState();
+    ] = useToggleableState();
     const [
         isMouseInIncomeSourceLabel,
         mouseEnteredIncomeSourceLabel,
         mouseExitedIncomeSourceLabel,
-    ] = useTogglableState();
+    ] = useToggleableState();
 
     return (
         <Container id="income-sources">
@@ -57,7 +57,7 @@ export const IncomeSources = (props: Props) => {
             </div>
             <TotalRow>
                 <span>Total</span>
-                <span>${props.incomeSources.reduce((total, i) => total += i.amount, 0).toFixed(2)}</span>
+                <span>${props.incomeSources.reduce((total, i) => total + i.amount, 0).toFixed(2)}</span>
             </TotalRow>
         </Container>
     );

@@ -20,7 +20,7 @@ const CreateIncomeSourceEpic = (
         return ajax.post(url, body, constructAjaxHeaders())
             .pipe(
                 map(res => res.response as BudgetContract),
-                mergeMap((contract) => [updateBudgetSuccess(Budget.fromContract(contract))]),
+                mergeMap(contract => [updateBudgetSuccess(Budget.fromContract(contract))]),
                 catchError(err => [ajaxFailure({err, failedAction: action.type})]),
             );
     }),
@@ -36,7 +36,7 @@ const UpdateIncomeSourceEpic = (
         return ajax.put(url, body, constructAjaxHeaders())
             .pipe(
                 map(res => res.response as BudgetContract),
-                mergeMap((contract) => [updateBudgetSuccess(Budget.fromContract(contract))]),
+                mergeMap(contract => [updateBudgetSuccess(Budget.fromContract(contract))]),
                 catchError(err => [ajaxFailure({err, failedAction: action.type})]),
             );
     }),
@@ -52,7 +52,7 @@ const DeleteIncomeSourceEpic = (
         return ajax.delete(url, constructAjaxHeaders())
             .pipe(
                 map(res => res.response as BudgetContract),
-                mergeMap((contract) => [updateBudgetSuccess(Budget.fromContract(contract))]),
+                mergeMap(contract => [updateBudgetSuccess(Budget.fromContract(contract))]),
                 catchError(err => [ajaxFailure({err, failedAction: action.type})]),
             );
     }),

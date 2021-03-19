@@ -2,9 +2,7 @@ import { Middleware } from "redux";
 import { removeLoadingIndicator, setLoadingIndicator } from "./control/loading/loading-slice";
 import { ajaxFailure } from "./session/session-slice";
 
-const startActionTypes =
-    // eslint-disable-next-line max-len
-    /.*(fetch|create|update|delete).*/i;
+const startActionTypes = /.*(fetch|create|update|delete).*/i;
 const finishActionType = /.*(success|fail)/i;
 
 export const loadingMiddleware: Middleware<unknown> = store => next => action => {

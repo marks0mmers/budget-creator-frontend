@@ -19,6 +19,7 @@ import {
 } from "./budget-slice";
 import { ajaxFailure } from "../../session/session-slice";
 import { setActiveBudget } from "../../control/budget/budget-slice";
+import {Toast} from "../../../util/toast";
 
 const FetchAllBudgetsEpic = (
     action$: Observable<Action>,
@@ -32,8 +33,7 @@ const FetchAllBudgetsEpic = (
                     .mapKeys((_, b) => b.id)
                     .toMap()),
                 setActiveBudget(window.localStorage.getItem("activeBudgetId") ?? ""),
-            ],
-            ),
+            ]),
             catchError(err => [ajaxFailure({err, failedAction: action.type})]),
         ),
     ),
@@ -48,7 +48,10 @@ const CreateBudgetEpic = (
         return ajax.post(url, body, constructAjaxHeaders())
             .pipe(
                 map(res => res.response as BudgetContract),
-                mergeMap((contract) => [createBudgetSuccess(Budget.fromContract(contract)), setActiveBudget(contract.id)]),
+                mergeMap((contract) => {
+                    Toast.success(`Created Budget: ${contract.title}`);
+                    return [createBudgetSuccess(Budget.fromContract(contract)), setActiveBudget(contract.id)];
+                }),
                 catchError(err => [ajaxFailure({err, failedAction: action.type})]),
             );
     }),
@@ -75,7 +78,10 @@ const UpdateBudgetEpic = (
         return ajax.put(url, body, constructAjaxHeaders())
             .pipe(
                 map(res => res.response as BudgetContract),
-                mergeMap(contract => [updateBudgetSuccess(Budget.fromContract(contract))]),
+                mergeMap(contract => {
+                    Toast.success(`Deleted Budget: ${action.payload.title}`);
+                    return [updateBudgetSuccess(Budget.fromContract(contract))];
+                }),
                 catchError(err => [ajaxFailure({err, failedAction: action.type})]),
             );
     }),

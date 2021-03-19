@@ -5,7 +5,8 @@ import { RootState } from "../../store";
 export const getActiveBudgetId = (state: RootState) => state.control.budget.activeBudgetId;
 
 export const getActiveBudget = createSelector(
-    [getBudgets, getActiveBudgetId],
+    getBudgets,
+    getActiveBudgetId,
     (budgets, activeBudget) => {
         return activeBudget ? budgets.get(activeBudget) : undefined;
     },

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { IncomeSource } from "../../../models/income-source";
 import { deleteIncomeSource } from "../../../state/data/income-source/income-source-slice";
 import { useMapDispatch } from "../../../state/hooks";
-import { useTogglableState } from "../../../util/use-togglable-state";
+import { useToggleableState } from "../../../util/use-toggleable-state";
 import { IncomeSourceForm } from "../../forms/income-source-form";
 import { CircleButton } from "../shared/circle-button";
 
@@ -20,12 +20,12 @@ export const IncomeSourceView = (props: Props) => {
         isEditing,
         handleEditClick,
         handleEditSourceSubmit,
-    ] = useTogglableState();
+    ] = useToggleableState();
     const [
         isMouseInIncomeSource,
         mouseEnteredIncomeSource,
         mouseExitedIncomeSource,
-    ] = useTogglableState();
+    ] = useToggleableState();
 
     const handleDeleteClick = useCallback(() => {
         dispatch.deleteIncomeSource({
