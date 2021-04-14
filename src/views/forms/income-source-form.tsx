@@ -67,11 +67,11 @@ export const IncomeSourceForm = (props: Props) => {
     return (
         <Form id="income-source-form" onSubmit={formik.handleSubmit}>
             <CircleButton
-                visible
                 marginTopBottom={10}
                 icon="clear"
                 type="button"
                 onClick={props.hideForm}
+                visible
             />
             <LabelInput id="name-label">
                 Name

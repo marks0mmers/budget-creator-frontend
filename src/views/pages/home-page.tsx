@@ -12,9 +12,9 @@ import { isBudgetLoading } from "../../state/control/loading/loading-selectors";
 import { deleteBudget } from "../../state/data/budget/budget-slice";
 import { BudgetDashboard } from "../components/budget-dashboard/budget-dashboard";
 
-export const HomePage = () => {
+const HomePage = () => {
     const [isBudgetModalOpen, openBudgetModal, closeBudgetModal ] = useModalState();
-    
+
     const appState = useMapState(state => ({
         activeBudget: getActiveBudget(state),
         isBudgetLoading: isBudgetLoading(state),
@@ -24,7 +24,7 @@ export const HomePage = () => {
         deleteBudget,
     });
 
-    const onDeleteBudgetClick = useCallback(async () => {
+    const onDeleteBudgetClick = useCallback(() => {
         if (window.confirm(`Are you sure you want to delete Budget: ${appState.activeBudget?.title}`) && appState.activeBudget?.id) {
             dispatch.deleteBudget(appState.activeBudget.id);
         }
@@ -66,3 +66,5 @@ export const HomePage = () => {
         </>
     );
 };
+
+export default HomePage;

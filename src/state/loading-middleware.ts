@@ -6,7 +6,7 @@ const startActionTypes = /.*(fetch|create|update|delete).*/i;
 const finishActionType = /.*(success|fail)/i;
 
 export const loadingMiddleware: Middleware<unknown> = store => next => action => {
-    if (action.type === ajaxFailure.type) {
+    if (ajaxFailure.match(action)) {
         store.dispatch(removeLoadingIndicator(action.payload.failedAction));
     } else if (finishActionType.test(action.type)) {
         const indicator = action.type.replace("Success", "").replace("Fail", "");

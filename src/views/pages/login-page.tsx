@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { isSessionLoading } from "../../state/control/loading/loading-selectors";
 import { useMapState } from "../../state/hooks";
@@ -7,8 +7,8 @@ import { getCurrentUser } from "../../state/session/session-selectors";
 import { LoginForm } from "../forms/login-form";
 import { ActivityLoading } from "../components/shared/activity-loading";
 
-export const LoginPage = () => {
-    const history = useHistory();
+const LoginPage = () => {
+    const navigate = useNavigate();
 
     const appState = useMapState(state => ({
         currentUser: getCurrentUser(state),
@@ -17,13 +17,15 @@ export const LoginPage = () => {
 
     useEffect(() => {
         if (appState.currentUser) {
-            history.push("/");
+            navigate("/");
         }
-    }, [appState.currentUser, history]);
+    }, [appState.currentUser, navigate]);
 
     return (
         <>
             {appState.isLoginLoading && <ActivityLoading />}
+            {/* This is so the header has some element there */}
+            <div style={{background: "lightgray"}}/>
             <RootElement id="login-page">
                 <Container id="login-container">
                     <Title id="title">Login to Budget Creator</Title>
@@ -61,3 +63,5 @@ const Title = styled.h1`
     text-align: center;
     line-height: 60px;
 `;
+
+export default LoginPage;

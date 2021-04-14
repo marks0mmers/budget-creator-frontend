@@ -10,6 +10,7 @@ interface Props {
 
 export const Modal: FC<Props> = (props: Props) => (
     <ReactModal
+        id="modal-container"
         style={{
             overlay: {
                 background: "rgba(0, 0, 0, 0.5)",

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ChangeEvent, useCallback, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, ColorType } from "../button";
 import { Select } from "../input";
 import { useMapDispatch, useMapState } from "../../../../state/hooks";
@@ -11,7 +11,7 @@ import { fetchAllBudgets } from "../../../../state/data/budget/budget-slice";
 import { setActiveBudget } from "../../../../state/control/budget/budget-slice";
 
 export const Header = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const appState = useMapState(state => ({
         activeBudget: getActiveBudget(state),
@@ -32,8 +32,8 @@ export const Header = () => {
 
 
     const onLoginClick = useCallback(() => {
-        history.push("/login");
-    }, [history]);
+        navigate("/login");
+    }, [navigate]);
 
     const onLogoutClick = useCallback(() => {
         //
@@ -45,8 +45,8 @@ export const Header = () => {
     }, [appState.budgets, dispatch]);
 
     return (
-        <StyledHeader>
-            <Title>Budget Creator</Title>
+        <StyledHeader id="header">
+            <Title id="header-title">Budget Creator</Title>
             <Select
                 width={200}
                 value={appState.activeBudget?.id ?? ""}
@@ -54,14 +54,15 @@ export const Header = () => {
             >
                 <option value="" key="">Select a Budget</option>
                 {appState.budgets
-                    .map(budget => (<option value={budget.id} key={budget.id}>{budget.title}</option>))
+                    .map(budget => <option value={budget.id} key={budget.id}>{budget.title}</option>)
                     .valueSeq()
-                    .toArray()}
+                    .toArray()
+                }
             </Select>
             <div id="buttons-container" style={{display: "flex", flexDirection: "row-reverse"}}/>
-            <Username>{appState.currentUser?.fullName ?? "Please Log In"}</Username>
+            <Username id="users-label">{appState.currentUser?.fullName ?? "Please Log In"}</Username>
             <Button
-                id="loginLogoutButton"
+                id="login-logout-button"
                 text={appState.currentUser ? "Log Out" : "Log In"}
                 height={40}
                 width={100}

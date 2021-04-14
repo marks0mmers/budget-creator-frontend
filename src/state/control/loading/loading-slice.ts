@@ -16,8 +16,10 @@ const loadingSlice = createSlice({
         setLoadingIndicator: (state, action: PayloadAction<string>) => {
             state.loadingIndicators = state.loadingIndicators.toMap().set(action.payload, true);
         },
-        removeLoadingIndicator: (state, action: PayloadAction<string>) => {
-            state.loadingIndicators = state.loadingIndicators.toMap().remove(action.payload);
+        removeLoadingIndicator: (state, action: PayloadAction<string | undefined>) => {
+            if (action.payload) {
+                state.loadingIndicators = state.loadingIndicators.toMap().remove(action.payload);
+            }
         },
     },
 });

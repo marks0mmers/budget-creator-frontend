@@ -1,14 +1,15 @@
-import { useEffect } from "react";
-import { Switch, Route, useLocation } from "react-router-dom";
+import React, { useEffect, Suspense } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useLocalStorage } from "../util/use-local-storage";
 import { Header } from "./components/shared/header/header";
-import { HomePage } from "./pages/home-page";
-import { LoginPage } from "./pages/login-page";
 import { ActivityLoading } from "./components/shared/activity-loading";
 import { useMapDispatch, useMapState } from "../state/hooks";
 import { getCurrentUser } from "../state/session/session-selectors";
 import { isSessionLoading } from "../state/control/loading/loading-selectors";
 import { fetchCurrentUser } from "../state/session/session-slice";
+
+const HomePage = React.lazy(() => import("./pages/home-page"));
+const LoginPage = React.lazy(() => import("./pages/login-page"));
 
 const App = () => {
     const location = useLocation();
@@ -33,14 +34,12 @@ const App = () => {
         <>
             {appState.isCurrentUserLoading && <ActivityLoading />}
             {location.pathname !== "/login" && <Header />}
-            <Switch>
-                <Route path="/login">
-                    <LoginPage />
-                </Route>
-                <Route path="/">
-                    <HomePage />
-                </Route>
-            </Switch>
+            <Suspense fallback={<ActivityLoading />}>
+                <Routes>
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/" element={<HomePage />} />
+                </Routes>
+            </Suspense>
         </>
     );
 };

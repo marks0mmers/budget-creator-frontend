@@ -25,18 +25,18 @@ const sessionSlice = createSlice({
         loginSuccess: (state, action: PayloadAction<User>) => {
             state.currentUser = action.payload;
         },
-        fetchCurrentUser: (state) => state,
+        fetchCurrentUser: state => state,
         fetchCurrentUserSuccess: (state, action: PayloadAction<User>) => {
             state.currentUser = action.payload;
         },
     },
 });
 
-export const { 
-    ajaxFailure, 
-    login, 
-    loginSuccess, 
-    fetchCurrentUser, 
+export const {
+    ajaxFailure,
+    login,
+    loginSuccess,
+    fetchCurrentUser,
     fetchCurrentUserSuccess,
 } = sessionSlice.actions;
 

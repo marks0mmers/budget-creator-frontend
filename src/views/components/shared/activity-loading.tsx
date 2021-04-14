@@ -2,7 +2,7 @@ import { BeatLoader } from "react-spinners";
 import styled from "styled-components";
 
 export const ActivityLoading = () => (
-    <Container>
+    <Container id="loading-mask-container">
         <div className="mask" />
         <BeatLoader loading={true} />
     </Container>
