@@ -1,7 +1,7 @@
 import { Action } from "@reduxjs/toolkit";
 import { combineEpics } from "redux-observable";
 import { Observable } from "rxjs";
-import { ajax } from "rxjs/internal-compatibility";
+import { ajax } from "rxjs/ajax";
 import { catchError, filter, map, mergeMap } from "rxjs/operators";
 import { Endpoints } from "../../constants/Endpoints";
 import { User, UserContract } from "../../models/user";
@@ -14,8 +14,8 @@ const FetchCurrentUserEpic = (
     filter(fetchCurrentUser.match),
     mergeMap(action => ajax.getJSON<UserContract>(Endpoints.Users.FetchCurrentUser, constructAjaxHeaders())
         .pipe(
-            mergeMap(contract => [fetchCurrentUserSuccess(new User(contract))]),
-            catchError(err => [ajaxFailure({err, failedAction: action.type})]),
+            mergeMap(contract => [fetchCurrentUserSuccess(User.fromContract(contract))]),
+            catchError(err => [ajaxFailure({ err, failedAction: action.type })]),
         ),
     ),
 );
@@ -30,9 +30,9 @@ const LoginEpic = (
             map(res => res.response as UserContract & { token?: string }),
             mergeMap(contract => {
                 window.localStorage.setItem("jwtToken", contract.token ?? "");
-                return [loginSuccess(new User(contract))];
+                return [loginSuccess(User.fromContract(contract))];
             }),
-            catchError(err => [ajaxFailure({err, failedAction: action.type})]),
+            catchError(err => [ajaxFailure({ err, failedAction: action.type })]),
         );
     }),
 );

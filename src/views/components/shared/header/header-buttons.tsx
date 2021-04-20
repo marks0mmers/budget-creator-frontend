@@ -6,7 +6,7 @@ interface Props {
     children?: ReactNode;
 }
 
-export const HeaderButtons = ({ children}: Props) => {
+export const HeaderButtons = ({ children }: Props) => {
     return createPortal(
         children,
         document.getElementById("buttons-container") ?? document.createElement("div"),

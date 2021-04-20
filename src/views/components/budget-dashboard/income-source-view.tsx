@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const IncomeSourceView = (props: Props) => {
-    const dispatch = useMapDispatch({deleteIncomeSource});
+    const dispatch = useMapDispatch({ deleteIncomeSource });
 
     const [
         isEditing,

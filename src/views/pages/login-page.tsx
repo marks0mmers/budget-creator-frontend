@@ -25,7 +25,7 @@ const LoginPage = () => {
         <>
             {appState.isLoginLoading && <ActivityLoading />}
             {/* This is so the header has some element there */}
-            <div style={{background: "lightgray"}}/>
+            <div style={{ background: "lightgray" }}/>
             <RootElement id="login-page">
                 <Container id="login-container">
                     <Title id="title">Login to Budget Creator</Title>

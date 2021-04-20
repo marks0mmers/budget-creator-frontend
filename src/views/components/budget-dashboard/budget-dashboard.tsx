@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { getActiveBudget } from "../../../state/control/budget/budget-selectors";
 import { useMapState } from "../../../state/hooks";
-import { IncomeSources } from "./income-sources";
+import { SourcesList } from "./sources-list";
 
 export const BudgetDashboard = () => {
     const appState = useMapState(state => ({
@@ -11,7 +11,7 @@ export const BudgetDashboard = () => {
     return (
         <Container id="budget-dashboard">
             {appState.activeBudget?.incomeSources &&
-                <IncomeSources
+                <SourcesList
                     budgetId={appState.activeBudget.id}
                     incomeSources={appState.activeBudget.incomeSources}
                 />

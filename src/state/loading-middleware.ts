@@ -1,4 +1,4 @@
-import { Middleware } from "redux";
+import { Middleware } from "@reduxjs/toolkit";
 import { removeLoadingIndicator, setLoadingIndicator } from "./control/loading/loading-slice";
 import { ajaxFailure } from "./session/session-slice";
 

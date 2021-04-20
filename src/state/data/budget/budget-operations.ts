@@ -1,7 +1,6 @@
-import { List } from "immutable";
 import { combineEpics } from "redux-observable";
 import { Observable } from "rxjs";
-import { ajax } from "rxjs/internal-compatibility";
+import { ajax } from "rxjs/ajax";
 import { Action } from "@reduxjs/toolkit";
 import { catchError, filter, map, mergeMap } from "rxjs/operators";
 import { Endpoints } from "../../../constants/Endpoints";
@@ -19,7 +18,7 @@ import {
 } from "./budget-slice";
 import { ajaxFailure } from "../../session/session-slice";
 import { setActiveBudget } from "../../control/budget/budget-slice";
-import {Toast} from "../../../util/toast";
+import { Toast } from "../../../util/toast";
 
 const FetchAllBudgetsEpic = (
     action$: Observable<Action>,
@@ -28,13 +27,10 @@ const FetchAllBudgetsEpic = (
     mergeMap(action => ajax.getJSON<BudgetContract[]>(Endpoints.Budgets.FetchAllBudgets, constructAjaxHeaders())
         .pipe(
             mergeMap(contracts => [
-                fetchAllBudgetsSuccess(List(contracts.map(Budget.fromContract))
-                    .toMap()
-                    .mapKeys((_, b) => b.id)
-                    .toMap()),
+                fetchAllBudgetsSuccess(contracts.reduce((map, b) => map.set(b.id, Budget.fromContract(b)), new Map<string, Budget>())),
                 setActiveBudget(window.localStorage.getItem("activeBudgetId") ?? ""),
             ]),
-            catchError(err => [ajaxFailure({err, failedAction: action.type})]),
+            catchError(err => [ajaxFailure({ err, failedAction: action.type })]),
         ),
     ),
 );
@@ -52,7 +48,7 @@ const CreateBudgetEpic = (
                     Toast.success(`Created Budget: ${contract.title}`);
                     return [createBudgetSuccess(Budget.fromContract(contract)), setActiveBudget(contract.id)];
                 }),
-                catchError(err => [ajaxFailure({err, failedAction: action.type})]),
+                catchError(err => [ajaxFailure({ err, failedAction: action.type })]),
             );
     }),
 );
@@ -64,7 +60,7 @@ const DeleteBudgetEpic = (
     mergeMap(action => ajax.delete(Endpoints.Budgets.DeleteBudget(action.payload), constructAjaxHeaders())
         .pipe(
             mergeMap(() => [deleteBudgetSuccess(action.payload), setActiveBudget(undefined)]),
-            catchError(err => [ajaxFailure({err, failedAction: action.type})]),
+            catchError(err => [ajaxFailure({ err, failedAction: action.type })]),
         ),
     ),
 );
@@ -82,7 +78,7 @@ const UpdateBudgetEpic = (
                     Toast.success(`Deleted Budget: ${action.payload.title}`);
                     return [updateBudgetSuccess(Budget.fromContract(contract))];
                 }),
-                catchError(err => [ajaxFailure({err, failedAction: action.type})]),
+                catchError(err => [ajaxFailure({ err, failedAction: action.type })]),
             );
     }),
 );

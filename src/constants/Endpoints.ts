@@ -1,6 +1,7 @@
 import { CreateBudgetContract, UpdateBudgetContract } from "../models/budget";
 import { UpsertIncomeSourceContract } from "../models/income-source";
 import { LoginContract } from "../models/user";
+import { UpsertExpenseCategoryContract } from "../models/expense-category";
 
 interface UrlWithBody<T> {
     url: string;
@@ -51,6 +52,24 @@ export class Endpoints {
             budgetId: string,
             incomeSourceId: string,
         ) =>`/api/budgets/${budgetId}/incomeSource/${incomeSourceId}`,
+    }
+
+    public static readonly ExpenseCategories = {
+        FetchExpenseCategories: "/api/expenseCategories",
+        CreateExpenseCategory: (
+            body: UpsertExpenseCategoryContract,
+        ): UrlWithBody<UpsertExpenseCategoryContract> => ({
+            url: "/api/expenseCategories",
+            body,
+        }),
+        UpdateExpenseCategory: (
+            expenseCategoryId: string,
+            body: UpsertExpenseCategoryContract,
+        ): UrlWithBody<UpsertExpenseCategoryContract> => ({
+            url: `/api/expenseCategories/${expenseCategoryId}`,
+            body,
+        }),
+        DeleteExpenseCategory: (expenseCategoryId: string) => `/api/expenseCategories/${expenseCategoryId}`,
     }
 }
 

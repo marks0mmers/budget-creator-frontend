@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AjaxError } from "rxjs/internal-compatibility";
+import { AjaxError } from "rxjs/ajax";
 import { LoginContract, User } from "../../models/user";
 import { Toast } from "../../util/toast";
 

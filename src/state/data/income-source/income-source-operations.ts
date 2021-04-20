@@ -4,7 +4,7 @@ import { Action } from "@reduxjs/toolkit";
 import { catchError, filter, map, mergeMap } from "rxjs/operators";
 import { createIncomeSource, deleteIncomeSource, updateIncomeSource } from "./income-source-slice";
 import { Endpoints } from "../../../constants/Endpoints";
-import { ajax } from "rxjs/internal-compatibility";
+import { ajax } from "rxjs/ajax";
 import { constructAjaxHeaders } from "../../../util/authentication-utility";
 import { Budget, BudgetContract } from "../../../models/budget";
 import { updateBudgetSuccess } from "../budget/budget-slice";
@@ -21,7 +21,7 @@ const CreateIncomeSourceEpic = (
             .pipe(
                 map(res => res.response as BudgetContract),
                 mergeMap(contract => [updateBudgetSuccess(Budget.fromContract(contract))]),
-                catchError(err => [ajaxFailure({err, failedAction: action.type})]),
+                catchError(err => [ajaxFailure({ err, failedAction: action.type })]),
             );
     }),
 );
@@ -37,7 +37,7 @@ const UpdateIncomeSourceEpic = (
             .pipe(
                 map(res => res.response as BudgetContract),
                 mergeMap(contract => [updateBudgetSuccess(Budget.fromContract(contract))]),
-                catchError(err => [ajaxFailure({err, failedAction: action.type})]),
+                catchError(err => [ajaxFailure({ err, failedAction: action.type })]),
             );
     }),
 );
@@ -53,7 +53,7 @@ const DeleteIncomeSourceEpic = (
             .pipe(
                 map(res => res.response as BudgetContract),
                 mergeMap(contract => [updateBudgetSuccess(Budget.fromContract(contract))]),
-                catchError(err => [ajaxFailure({err, failedAction: action.type})]),
+                catchError(err => [ajaxFailure({ err, failedAction: action.type })]),
             );
     }),
 );

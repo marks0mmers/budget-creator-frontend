@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { AjaxError } from "rxjs/internal-compatibility";
+import { AjaxError } from "rxjs/ajax";
 
 class ToastInstance {
     public success(message: string) {

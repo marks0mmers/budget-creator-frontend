@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { ActionCreatorsMapObject, bindActionCreators } from "redux";
+import { ActionCreatorsMapObject, bindActionCreators } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
 export const useMapDispatch = <T extends ActionCreatorsMapObject>(mapDispatch: T): T => {

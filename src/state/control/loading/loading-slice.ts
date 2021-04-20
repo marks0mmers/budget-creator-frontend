@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Collection, Map } from "immutable";
+
 
 interface LoadingState {
-    loadingIndicators: Collection<string, boolean>;
+    loadingIndicators: Map<string, boolean>;
 }
 
 const initialState: LoadingState = {
-    loadingIndicators: Map(),
+    loadingIndicators: new Map<string, boolean>(),
 };
 
 const loadingSlice = createSlice({
@@ -14,11 +14,11 @@ const loadingSlice = createSlice({
     initialState,
     reducers: {
         setLoadingIndicator: (state, action: PayloadAction<string>) => {
-            state.loadingIndicators = state.loadingIndicators.toMap().set(action.payload, true);
+            state.loadingIndicators.set(action.payload, true);
         },
         removeLoadingIndicator: (state, action: PayloadAction<string | undefined>) => {
             if (action.payload) {
-                state.loadingIndicators = state.loadingIndicators.toMap().remove(action.payload);
+                state.loadingIndicators.delete(action.payload);
             }
         },
     },

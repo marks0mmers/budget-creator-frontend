@@ -7,7 +7,7 @@ export const LabelInput = styled.label`
 `;
 
 export const Required = () => (
-    <span id="required" style={{color: "red", marginLeft: 5}}>*</span>
+    <span id="required" style={{ color: "red", marginLeft: 5 }}>*</span>
 );
 
 export const Error = styled.div`

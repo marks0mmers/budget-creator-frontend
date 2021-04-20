@@ -16,7 +16,7 @@ interface Props {
     closeModal: () => void;
 }
 
-export const BudgetForm = ({closeModal}: Props) => {
+export const BudgetForm = ({ closeModal }: Props) => {
     const appState = useMapState(state => ({
         isBudgetLoading: isBudgetLoading(state),
     }));

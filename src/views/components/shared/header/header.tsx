@@ -53,13 +53,11 @@ export const Header = () => {
                 onChange={onBudgetSelectorChanged}
             >
                 <option value="" key="">Select a Budget</option>
-                {appState.budgets
+                {[...appState.budgets.values()]
                     .map(budget => <option value={budget.id} key={budget.id}>{budget.title}</option>)
-                    .valueSeq()
-                    .toArray()
                 }
             </Select>
-            <div id="buttons-container" style={{display: "flex", flexDirection: "row-reverse"}}/>
+            <div id="buttons-container" style={{ display: "flex", flexDirection: "row-reverse" }}/>
             <Username id="users-label">{appState.currentUser?.fullName ?? "Please Log In"}</Username>
             <Button
                 id="login-logout-button"
